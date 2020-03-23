@@ -51,7 +51,6 @@ def base64_encode(whateverString):
     return base64.b64encode(whateverString)
 
 
-# NO OK
 def decode_saml(samlString):
     """
     :function decode_saml: decode saml by doing url unquoting, base 64 decoding and decompression
@@ -115,16 +114,16 @@ def main():
     printableReturn = ''
     parser = argparse.ArgumentParser(description="Python tool helping to decode/encode url, base64 and saml strings.")
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--infile", type=str, help="file path", dest='fileName', default='')
-    group.add_argument("--instr", type=str, help='str input data', dest='content', default='')
+    group.add_argument("--infile", type=str, help="file path", dest='fileName')
+    group.add_argument("--instr", type=str, help='str input data', dest='content')
 
     parser.add_argument("function", help="requested function", choices=["url_decode", "url_encode", "base64_decode",
                                                                         "base64_encode", "saml_decode", "saml_encode"])
     args = parser.parse_args()
 
-    if args.fileName != '':
+    if args.fileName is not None:
         content = read_from_file(args.fileName)
-    elif args.content != '':
+    elif args.content is not None:
         content = args.content
     else:
         print('An input is needed!')
