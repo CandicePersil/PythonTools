@@ -33,96 +33,95 @@ def url_decode(url):
     return urlparse.unquote(url)
 
 
-def base64_deçode(base64String):
+def base64_decode(base64string):
     """
-    :function base64_çode: decode base 64 encoded string
-    :param base64String:     base 64 encoded string
+    :function base64_code:   decode base 64 encoded string
+    :param base64string:     base 64 encoded string
     :return:                 decoded string
     """
-    return base64.b64decode(base64String)
+    return base64.b64decode(base64string)
 
 
-def base64_encode(whateverString):
+def base64_encode(whateverstring):
     """
     :function base64_encode: encode string using base 64 encoding
-    :param whateverString:   simple string
-    :return:                 base 64 encoded string
+    :param whateverstring:   simple string
+    :return:                 base 64 encoded string previously utf8 encoded
     """
-    return base64.b64encode(whateverString)
+    return base64.b64encode(bytes(whateverstring, 'utf8'))
 
 
-def decode_saml(samlString):
+def decode_saml(samlstring):
     """
     :function decode_saml: decode saml by doing url unquoting, base 64 decoding and decompression
-    :param samlString:     encoded saml string
+    :param samlstring:     encoded saml string
     :return:               decoded saml string
     """
-    urlDecodedSaml = urlparse.unquote(samlString)
-    urlDecodedSamlPlus = urlDecodedSaml + '==='
-    decodedSamlBytes = base64.b64decode(urlDecodedSamlPlus.encode('utf8'))
+    urldecodedsaml = urlparse.unquote(samlstring)
+    urldecodedsamlplus = urldecodedsaml + '==='
+    decodedsamlbytes = base64.b64decode(urldecodedsamlplus.encode('utf8'))
 
     # can be only b64 encoded and not compressed
     try:
         # the input must include a zlib header and trailer
-        samlDecompressed = zlib.decompress(decodedSamlBytes, +15)
+        samldecompressed = zlib.decompress(decodedsamlbytes, +15)
     except zlib.error:
         try:
             # Uses the absolute value of wbits as the window size logarithm.
             # The input must be a raw stream with no header or trailer.
-            samlDecompressed = zlib.decompress(decodedSamlBytes, -15)
+            samldecompressed = zlib.decompress(decodedsamlbytes, -15)
         except zlib.error:
             print('Decompression failed, only zlib compressed data with ou without headers are accepted.')
-            samlDecompressed = None
+            samldecompressed = None
 
-    decodedString = samlDecompressed.decode('utf8')
-    return decodedString
+    decodedstring = samldecompressed.decode('utf8')
+    return decodedstring
 
 
-def encode_saml(samlString):
+def encode_saml(samlstring):
     """
     :function encode_saml: encode saml by doing compression, base 64 encoding and url quoting
     :param samlString:     saml like string
     :return:               encoded saml string
     """
-    samlBytesLike = samlString.encode('utf8')
-    samlCompressed = zlib.compress(samlBytesLike)
-    encodedSamlBytes = base64.b64encode(samlCompressed)
-    encodedSaml = encodedSamlBytes.decode('utf8')
-    urlEncodedSaml = urlparse.quote(encodedSaml)
-    return urlEncodedSaml
+    samlbyteslike = samlstring.encode('utf8')
+    samlcompressed = zlib.compress(samlbyteslike)
+    encodedsamlbytes = base64.b64encode(samlcompressed)
+    encodedsaml = encodedsamlbytes.decode('utf8')
+    urlencodedsaml = urlparse.quote(encodedsaml)
+    return urlencodedsaml
 
 
-def read_from_file(filePath):
+def read_from_file(filepath):
     """
     :function read_from_file: read the content of file and remove carriage return
     :param filePath:          file path with file name
     :return: samlText         content of file
     """
-    samlText = ""
+    samltext = ""
     # check existing file
     try:
-        with open(filePath, "r") as exf:
+        with open(filepath, "r") as exf:
             for line in exf:
-                samlText += line.rstrip("\n")
+                samltext += line.rstrip("\n")
     except FileNotFoundError:
         print("Wrong file or file path!")
         exit(1)
-    return samlText
+    return samltext
 
 def main():
-    content = ''
-    printableReturn = ''
+    printablereturn = ''
     parser = argparse.ArgumentParser(description="Python tool helping to decode/encode url, base64 and saml strings.")
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--infile", type=str, help="file path", dest='fileName')
+    group.add_argument("--infile", type=str, help="file path", dest='filename')
     group.add_argument("--instr", type=str, help='str input data', dest='content')
 
     parser.add_argument("function", help="requested function", choices=["url_decode", "url_encode", "base64_decode",
                                                                         "base64_encode", "saml_decode", "saml_encode"])
     args = parser.parse_args()
 
-    if args.fileName is not None:
-        content = read_from_file(args.fileName)
+    if args.filename is not None:
+        content = read_from_file(args.filename)
     elif args.content is not None:
         content = args.content
     else:
@@ -130,19 +129,19 @@ def main():
         exit(1)
 
     if args.function == 'url_decode':
-        printableReturn = url_decode(content)
+        printablereturn = url_decode(content)
     elif args.function == 'url_encode':
-        printableReturn = url_encode(content)
+        printablereturn = url_encode(content)
     elif args.function == 'base64_decode':
-        printableReturn = base64_deçode(content)
+        printablereturn = base64_decode(content)
     elif args.function == 'base64_encode':
-        printableReturn = base64_deçode(content)
+        printablereturn = base64_encode(content)
     elif args.function == 'saml_decode':
-        printableReturn = decode_saml(content)
+        printablereturn = decode_saml(content)
     elif args.function == 'saml_encode':
-        printableReturn = encode_saml(content)
+        printablereturn = encode_saml(content)
 
-    print(printableReturn)
+    print(printablereturn)
 
 
 if __name__ == "__main__":
