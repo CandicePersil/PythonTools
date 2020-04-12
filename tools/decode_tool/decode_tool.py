@@ -1,23 +1,26 @@
 #!/usr/bin/python3.8
 # -*-coding:Utf-8 -*
 
+
 """decode_tool.py: Encode and decode strings"""
 """Functions: base64, gzip, url encode and decode, base 64 decode and inflate"""
 """Input: strings, file"""
-
-import argparse
-import urllib.parse as urlparse
-import zlib
-import base64
 
 __author__ = "Candice P"
 __copyright__ = "Copyright 2020, Python tools"
 __version__ = "1.0.0"
 
 
+import argparse
+import urllib.parse as urlparse
+import zlib
+import base64
+
+
 def url_encode(url):
     """
-    :function url_encode: encode string
+    :function url_encode: encode string:
+
     :param url:           url or query string
     :return:              encoded url/query string
     """
@@ -26,7 +29,8 @@ def url_encode(url):
 
 def url_decode(url):
     """
-    :function url_decode: decode url encoded string
+    :function url_decode: decode url encoded string:
+
     :param url:           url or query string
     :return:              decoded url/query encoded string
     """
@@ -35,7 +39,8 @@ def url_decode(url):
 
 def base64_decode(base64string):
     """
-    :function base64_code:   decode base 64 encoded string
+    :function base64_code:   decode base 64 encoded string:
+
     :param base64string:     base 64 encoded string
     :return:                 decoded string
     """
@@ -44,7 +49,8 @@ def base64_decode(base64string):
 
 def base64_encode(whateverstring):
     """
-    :function base64_encode: encode string using base 64 encoding
+    :function base64_encode: encode string using base 64 encoding:
+
     :param whateverstring:   simple string
     :return:                 base 64 encoded string previously utf8 encoded
     """
@@ -53,7 +59,8 @@ def base64_encode(whateverstring):
 
 def decode_saml(samlstring):
     """
-    :function decode_saml: decode saml by doing url unquoting, base 64 decoding and decompression
+    :function decode_saml: decode saml by doing url unquoting, base 64 decoding and decompression:
+
     :param samlstring:     encoded saml string
     :return:               decoded saml string
     """
@@ -80,7 +87,8 @@ def decode_saml(samlstring):
 
 def encode_saml(samlstring):
     """
-    :function encode_saml: encode saml by doing compression, base 64 encoding and url quoting
+    :function encode_saml: encode saml by doing compression, base 64 encoding and url quoting:
+
     :param samlString:     saml like string
     :return:               encoded saml string
     """
@@ -94,7 +102,8 @@ def encode_saml(samlstring):
 
 def read_from_file(filepath):
     """
-    :function read_from_file: read the content of file and remove carriage return
+    :function read_from_file: read the content of file and remove carriage return:
+
     :param filePath:          file path with file name
     :return: samlText         content of file
     """
@@ -109,7 +118,17 @@ def read_from_file(filepath):
         exit(1)
     return samltext
 
+
 def main():
+    """
+    :main function:
+    :description:   Python tool helping to decode/encode url, base64 and saml strings:
+
+    :functions:     base64, url, and saml encode and decode:
+    :inputs:        strings, file:
+
+    :return:        none
+    """
     printablereturn = ''
     parser = argparse.ArgumentParser(description="Python tool helping to decode/encode url, base64 and saml strings.")
     group = parser.add_mutually_exclusive_group()
